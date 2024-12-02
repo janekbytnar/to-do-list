@@ -21,6 +21,7 @@ dependencies:
       path: packages/user_repository
   task_repository:
       path: packages/task_repository
+  cupertino_icons: ^1.0.8
 
 
     
