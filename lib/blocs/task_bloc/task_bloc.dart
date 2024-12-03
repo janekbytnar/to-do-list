@@ -10,6 +10,7 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
   TaskBloc({required this.taskRepository}) : super(const TaskState.loading()) {
     on<LoadTasks>(_onLoadTasks);
+    on<LoadCompletedTasks>(_onLoadCompletedTasks);
   }
 
   Future<void> _onLoadTasks(LoadTasks event, Emitter<TaskState> emit) async {
@@ -17,6 +18,24 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
 
     try {
       final tasks = await taskRepository.getTasksByUserId(event.userId);
+
+      if (tasks.isNotEmpty) {
+        emit(TaskState.hasTasks(tasks));
+      } else {
+        emit(const TaskState.noTasks());
+      }
+    } catch (error) {
+      emit(TaskState.failure(error.toString()));
+    }
+  }
+
+  Future<void> _onLoadCompletedTasks(
+      LoadCompletedTasks event, Emitter<TaskState> emit) async {
+    emit(const TaskState.loading());
+
+    try {
+      final tasks =
+          await taskRepository.getCompletedTasksByUserId(event.userId);
 
       if (tasks.isNotEmpty) {
         emit(TaskState.hasTasks(tasks));

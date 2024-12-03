@@ -78,4 +78,27 @@ class FirebaseTaskRepo implements TaskRepository {
       throw Exception('Failed to load tasks: $e');
     }
   }
+
+  @override
+  Future<List<Task>> getCompletedTasksByUserId(String userId) async {
+    try {
+      final incompleteQuerySnapshot = await taskCollection
+          .where('userId', isEqualTo: userId)
+          .where('isCompleted', isEqualTo: true)
+          .get();
+
+      final tasks = [
+        ...incompleteQuerySnapshot.docs.map((doc) {
+          final data = doc.data();
+          data['taskId'] = doc.id;
+          final taskEntity = TaskEntity.fromDocument(data);
+          return Task.fromEntity(taskEntity);
+        }),
+      ];
+
+      return tasks;
+    } catch (e) {
+      throw Exception('Failed to load history tasks: $e');
+    }
+  }
 }

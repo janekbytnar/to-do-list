@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:soft_for/blocs/task_bloc/task_bloc.dart';
 import 'package:soft_for/lib/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:soft_for/lib/screens/auth/views/welcome_screen.dart';
-import 'package:soft_for/lib/screens/home/views/blocs/task_management_bloc/task_management_bloc.dart';
+import 'package:soft_for/lib/screens/home/blocs/task_management_bloc/task_management_bloc.dart';
 import 'package:soft_for/lib/screens/home/views/home.dart';
 import 'package:task_repository/task_repository.dart';
 import 'package:user_repository/user_repository.dart';

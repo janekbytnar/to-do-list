@@ -5,8 +5,9 @@ import 'package:soft_for/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:soft_for/blocs/task_bloc/task_bloc.dart';
 import 'package:soft_for/components/my_button.dart';
 import 'package:soft_for/components/my_dialog.dart';
+import 'package:soft_for/lib/completed_tasks/views/completed_tasks.dart';
 import 'package:soft_for/lib/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
-import 'package:soft_for/lib/screens/home/views/blocs/task_management_bloc/task_management_bloc.dart';
+import 'package:soft_for/lib/screens/home/blocs/task_management_bloc/task_management_bloc.dart';
 import 'package:task_repository/task_repository.dart';
 import 'package:user_repository/user_repository.dart';
 
@@ -111,6 +112,17 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.history),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CompletedTasksScreen(),
+              ),
+            );
+          },
+        ),
         title: FutureBuilder<MyUser?>(
           future: userFuture,
           builder: (context, snapshot) {

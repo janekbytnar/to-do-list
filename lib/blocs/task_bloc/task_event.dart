@@ -15,3 +15,12 @@ class LoadTasks extends TaskEvent {
   @override
   List<Object?> get props => [userId];
 }
+
+class LoadCompletedTasks extends TaskEvent {
+  final String userId;
+
+  const LoadCompletedTasks(this.userId);
+
+  @override
+  List<Object?> get props => [userId];
+}
