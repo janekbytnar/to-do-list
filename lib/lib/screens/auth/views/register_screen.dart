@@ -16,6 +16,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final firstNameController = TextEditingController();
   final confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool registerFirebaseError = false;
@@ -44,6 +45,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
           } else if (!RegExp(r'^[\w=\.]+@([\w-]+.)+.[\w-]{2,3}$')
               .hasMatch(val)) {
             return 'Invalid email format';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget _firstNameField() {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: MyTextField(
+        controller: firstNameController,
+        hintText: 'First name',
+        obscureText: false,
+        keyboardType: TextInputType.text,
+        prefixIcon: const Icon(CupertinoIcons.person_solid),
+        errorMsg: _errorMsg,
+        validator: (val) {
+          if (val!.isEmpty) {
+            return 'Please enter you first name';
           }
           return null;
         },
@@ -134,6 +155,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             MyUser myUser = MyUser.empty;
             myUser = myUser.copyWith(
               email: emailController.text.toLowerCase(),
+              firstName: capitalizeFirstLetter(firstNameController.text),
             );
             setState(() {
               context.read<RegisterBloc>().add(RegisterRequired(
@@ -182,6 +204,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             const SizedBox(height: 20),
             _emailField(),
             const SizedBox(height: 10),
+            _firstNameField(),
+            const SizedBox(height: 10),
             _passwordField(),
             const SizedBox(height: 10),
             _confirmPasswordField(),
@@ -198,5 +222,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  String capitalizeFirstLetter(String input) {
+    if (input.isEmpty) return input;
+    return input[0].toUpperCase() + input.substring(1).toLowerCase();
   }
 }
