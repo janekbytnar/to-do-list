@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:task_repository/task_repository.dart';
 
 class FirebaseTaskRepo implements TaskRepository {
-  final taskCollection = FirebaseFirestore.instance.collection('tasks');
+  final taskCollection = FirebaseFirestore.instance.collection('task');
 
   FirebaseTaskRepo();
 
@@ -37,6 +37,28 @@ class FirebaseTaskRepo implements TaskRepository {
     } catch (e) {
       log('Error updating task: ${e.toString()}');
       rethrow;
+    }
+  }
+
+  @override
+  Future<List<Task>> getTasksByUserId(String userId) async {
+    try {
+      final querySnapshot =
+          await taskCollection.where('userId', isEqualTo: userId).get();
+
+      final tasks = querySnapshot.docs.map((doc) {
+        final data = doc.data() as Map<String, dynamic>;
+
+        // Add the document ID to the data map
+        data['taskId'] = doc.id;
+
+        final taskEntity = TaskEntity.fromDocument(data);
+        return Task.fromEntity(taskEntity);
+      }).toList();
+
+      return tasks;
+    } catch (e) {
+      throw Exception('Failed to load tasks: $e');
     }
   }
 }

@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:task_repository/task_repository.dart';
 
 class TaskEntity extends Equatable {
   final String taskId;
@@ -6,11 +8,16 @@ class TaskEntity extends Equatable {
   final String task;
   final bool isCompleted;
 
+  final DateTime createdAt;
+  final DateTime lastUpdate;
+
   const TaskEntity({
     required this.taskId,
     required this.userId,
     required this.task,
     required this.isCompleted,
+    required this.createdAt,
+    required this.lastUpdate,
   });
 
   Map<String, Object?> toDocument() {
@@ -19,6 +26,8 @@ class TaskEntity extends Equatable {
       'userId': userId,
       'task': task,
       'isCompleted': isCompleted,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'lastUpdate': Timestamp.fromDate(lastUpdate),
     };
   }
 
@@ -27,7 +36,20 @@ class TaskEntity extends Equatable {
       taskId: doc['taskId'] ?? '',
       userId: doc['userId'] ?? '',
       task: doc['task'] ?? '',
-      isCompleted: doc['isCompleted'] ?? '',
+      isCompleted: doc['isCompleted'] ?? false,
+      createdAt: (doc['createdAt'] as Timestamp).toDate(),
+      lastUpdate: (doc['lastUpdate'] as Timestamp).toDate(),
+    );
+  }
+
+  Task toModel() {
+    return Task(
+      taskId: taskId,
+      userId: userId,
+      task: task,
+      isCompleted: isCompleted,
+      createdAt: createdAt,
+      lastUpdate: lastUpdate,
     );
   }
 
@@ -37,5 +59,7 @@ class TaskEntity extends Equatable {
         userId,
         task,
         isCompleted,
+        createdAt,
+        lastUpdate,
       ];
 }
