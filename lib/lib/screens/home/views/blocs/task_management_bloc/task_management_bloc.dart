@@ -11,9 +11,10 @@ class TaskManagementBloc
   final TaskRepository taskRepository;
   final UserRepository userRepository;
 
-  TaskManagementBloc(
-      {required this.taskRepository, required this.userRepository})
-      : super(TaskManagementInitial()) {
+  TaskManagementBloc({
+    required this.taskRepository,
+    required this.userRepository,
+  }) : super(TaskManagementInitial()) {
     on<AddTaskEvent>(_onAddTask);
     on<RemoveTaskEvent>(_onRemoveTask);
     on<UpdateTaskEvent>(_onUpdateTask);

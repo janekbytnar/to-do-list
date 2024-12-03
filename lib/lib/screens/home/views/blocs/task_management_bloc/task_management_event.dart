@@ -30,10 +30,10 @@ class RemoveTaskEvent extends TaskManagementEvent {
 }
 
 class UpdateTaskEvent extends TaskManagementEvent {
-  final Task task;
+  final String taskId;
 
-  const UpdateTaskEvent(this.task);
+  const UpdateTaskEvent(this.taskId);
 
   @override
-  List<Object> get props => [task];
+  List<Object> get props => [taskId];
 }
