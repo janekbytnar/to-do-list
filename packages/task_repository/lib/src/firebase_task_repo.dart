@@ -11,7 +11,7 @@ class FirebaseTaskRepo implements TaskRepository {
   @override
   Future<void> addTask(Task task) async {
     try {
-      await taskCollection.add(task.toEntity().toDocument());
+      await taskCollection.doc(task.taskId).set(task.toEntity().toDocument());
     } catch (e) {
       log('Error adding task: ${e.toString()}');
       rethrow;
@@ -33,6 +33,7 @@ class FirebaseTaskRepo implements TaskRepository {
     try {
       await taskCollection.doc(taskId).update({
         'isCompleted': true,
+        'lastUpdate': DateTime.now(),
       });
     } catch (e) {
       log('Error updating task: ${e.toString()}');
@@ -43,18 +44,34 @@ class FirebaseTaskRepo implements TaskRepository {
   @override
   Future<List<Task>> getTasksByUserId(String userId) async {
     try {
-      final querySnapshot =
-          await taskCollection.where('userId', isEqualTo: userId).get();
+      final now = DateTime.now();
+      final yesterday = now.subtract(const Duration(days: 1));
 
-      final tasks = querySnapshot.docs.map((doc) {
-        final data = doc.data() as Map<String, dynamic>;
+      final incompleteQuerySnapshot = await taskCollection
+          .where('userId', isEqualTo: userId)
+          .where('isCompleted', isEqualTo: false)
+          .get();
 
-        // Add the document ID to the data map
-        data['taskId'] = doc.id;
+      final completedQuerySnapshot = await taskCollection
+          .where('userId', isEqualTo: userId)
+          .where('isCompleted', isEqualTo: true)
+          .where('lastUpdate', isGreaterThan: yesterday)
+          .get();
 
-        final taskEntity = TaskEntity.fromDocument(data);
-        return Task.fromEntity(taskEntity);
-      }).toList();
+      final tasks = [
+        ...incompleteQuerySnapshot.docs.map((doc) {
+          final data = doc.data();
+          data['taskId'] = doc.id;
+          final taskEntity = TaskEntity.fromDocument(data);
+          return Task.fromEntity(taskEntity);
+        }),
+        ...completedQuerySnapshot.docs.map((doc) {
+          final data = doc.data();
+          data['taskId'] = doc.id;
+          final taskEntity = TaskEntity.fromDocument(data);
+          return Task.fromEntity(taskEntity);
+        }),
+      ];
 
       return tasks;
     } catch (e) {

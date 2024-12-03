@@ -22,6 +22,7 @@ dependencies:
       path: packages/user_repository
   task_repository:
       path: packages/task_repository
+  intl: ^0.20.0
   
 
 
