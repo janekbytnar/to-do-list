@@ -23,6 +23,8 @@ dependencies:
   task_repository:
       path: packages/task_repository
   intl: ^0.20.0
+  http: ^1.2.2
+  html_unescape: ^2.0.0
   
 
 

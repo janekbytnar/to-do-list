@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:soft_for/blocs/task_bloc/task_bloc.dart';
 import 'package:soft_for/lib/screens/auth/blocs/sign_in_bloc/sign_in_bloc.dart';
 import 'package:soft_for/lib/screens/auth/views/welcome_screen.dart';
 import 'package:soft_for/lib/screens/home/blocs/task_management_bloc/task_management_bloc.dart';
@@ -34,11 +33,6 @@ class MyAppView extends StatelessWidget {
                   create: (context) => SignInBloc(
                     userRepository:
                         context.read<AuthenticationBloc>().userRepository,
-                  ),
-                ),
-                BlocProvider(
-                  create: (context) => TaskBloc(
-                    taskRepository: context.read<TaskRepository>(),
                   ),
                 ),
                 BlocProvider(

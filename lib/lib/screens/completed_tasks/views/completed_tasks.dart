@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:soft_for/blocs/authentication_bloc/authentication_bloc.dart';
 import 'package:soft_for/blocs/task_bloc/task_bloc.dart';
+import 'package:soft_for/components/my_button.dart';
 import 'package:soft_for/lib/screens/home/blocs/task_management_bloc/task_management_bloc.dart';
+import 'package:soft_for/lib/screens/quiz_app/views/quiz_app.dart';
 import 'package:user_repository/user_repository.dart';
 
 class CompletedTasksScreen extends StatefulWidget {
@@ -23,6 +25,22 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
     final userId = context.read<AuthenticationBloc>().state.user!.uid;
     context.read<TaskBloc>().add(LoadCompletedTasks(userId));
     userFuture = context.read<UserRepository>().getCurrentUserData();
+  }
+
+  Widget _playGameButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30.0),
+      child: MyTextButton(
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const QuizPage(),
+              ),
+            );
+          },
+          text: 'Play Game'),
+    );
   }
 
   Widget _listTiles(state) {
@@ -93,6 +111,7 @@ class _CompletedTasksScreenState extends State<CompletedTasksScreen> {
               },
             ),
           ),
+          _playGameButton(context),
         ],
       ),
     );
