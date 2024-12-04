@@ -41,12 +41,13 @@ class QuizPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               } else if (state is QuizLoaded) {
                 final question = state.questions[state.currentQuestionIndex];
+                print(question.correctAnswer);
                 return Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
                       Text(
-                        'Question ${state.currentQuestionIndex + 1} z ${state.questions.length}',
+                        'Question ${state.currentQuestionIndex + 1} of ${state.questions.length}',
                         style: const TextStyle(fontSize: 22),
                       ),
                       const SizedBox(height: 20),

@@ -42,14 +42,9 @@ class ResultPage extends StatelessWidget {
             const SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                // Powrót do strony głównej i restart quizu
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => QuizPage()),
-                  (route) => false,
-                );
+                Navigator.pop(context);
               },
-              child: const Text('Try again'),
+              child: const Text('Back to completed tasks'),
             ),
           ],
         ),
